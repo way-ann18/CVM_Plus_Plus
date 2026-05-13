@@ -18,6 +18,7 @@ enum class TokenType{
     LESS,
     GREATER,
     EQUALS,
+    COLON,
 
     LET,
     PRINT,
@@ -40,7 +41,7 @@ struct Token{
 class Lexer{
     public:
         Lexer(const string& source);
-        vector<Token> tokensize();
+        vector<Token> tokenize();
     private:
         string src;
         int pos=0;

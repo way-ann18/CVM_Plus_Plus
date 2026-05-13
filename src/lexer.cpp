@@ -42,6 +42,7 @@ Token Lexer::scanIdentifierOrKeyword(){
         {"input", TokenType::INPUT},
         {"if", TokenType::IF},
         {"else", TokenType::ELSE},
+        {"while", TokenType::WHILE},
         {"right", TokenType::BOOL_TRUE},
         {"wrong", TokenType::BOOL_FALSE}
     };
@@ -52,7 +53,7 @@ Token Lexer::scanIdentifierOrKeyword(){
     return {TokenType::IDENTIFIER, word, line};
 }
 
-std::vector<Token> Lexer::tokensize(){
+std::vector<Token> Lexer::tokenize(){
     std::vector<Token> tokens;
     while(pos<src.size()){
         skipWhiteSpace();
@@ -99,6 +100,10 @@ std::vector<Token> Lexer::tokensize(){
             else{
                 tokens.push_back({TokenType::EQUALS, "=", line});
             }
+        }
+        else if(c==':'){
+            advance();
+            tokens.push_back({TokenType::COLON, ":", line});
         }
         else if(c=='\n'){
             tokens.push_back({TokenType::NEWLINE, "\\n", line});
