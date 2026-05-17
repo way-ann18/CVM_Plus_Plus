@@ -44,7 +44,8 @@ Token Lexer::scanIdentifierOrKeyword(){
         {"else", TokenType::ELSE},
         {"while", TokenType::WHILE},
         {"right", TokenType::BOOL_TRUE},
-        {"wrong", TokenType::BOOL_FALSE}
+        {"wrong", TokenType::BOOL_FALSE},
+        {"end", TokenType::END}
     };
     auto it=keywords.find(word);
     if(it!=keywords.end()){

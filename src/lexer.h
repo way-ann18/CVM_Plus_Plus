@@ -28,6 +28,7 @@ enum class TokenType{
     WHILE,
 
     NEWLINE,
+    END,
     END_OF_FILE
 
 };

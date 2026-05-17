@@ -51,9 +51,12 @@ std::vector<NodePtr> Parser::parse(){
 std::vector<NodePtr> Parser::parseBlock(){
     std::vector<NodePtr> statements;
     skipNewLines();
-    if(!check(TokenType::END_OF_FILE) && !check(TokenType::ELSE)){
+    while(!check(TokenType::END_OF_FILE) && !check(TokenType::ELSE) && !check(TokenType::END)){
         statements.push_back(parseStatement());
-        match(TokenType::NEWLINE);
+        skipNewLines();
+    }
+    if(check(TokenType::END)){
+        advance();
     }
     return statements;
 }
@@ -103,12 +106,11 @@ NodePtr Parser::parseIf(){
     advance();
     NodePtr condition=parseExpression();
     expect(TokenType::COLON, "expected ':' after if condition");
-    match(TokenType::NEWLINE);
+    expect(TokenType::NEWLINE, "expected newline after ':'");
     std::vector<NodePtr> thenBlock=parseBlock();
     std::vector<NodePtr> elseBlock;
     skipNewLines();
     if(match(TokenType::ELSE)){
-        expect(TokenType::COLON, "expected ':' after else");
         match(TokenType::NEWLINE);
         elseBlock=parseBlock();
     }
@@ -119,7 +121,7 @@ NodePtr Parser::parseWhile(){
     advance();
     NodePtr condition=parseExpression();
     expect(TokenType::COLON, "expected ':' after while condition");
-    match(TokenType::NEWLINE);
+    expect(TokenType::NEWLINE, "expected newline after ':'");
     std::vector<NodePtr> body=parseBlock();
     return std::make_unique<WhileStatement>(std::move(condition), std::move(body));
 }
