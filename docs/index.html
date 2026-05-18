@@ -156,61 +156,80 @@ end</textarea>
 
   <div id="status">Loading CVM++ engine...</div>
 
-  <script src="cvm.js"></script>
-  <script>
+<script src="cvm.js"></script>
+<script>
     var cvmReady = false;
     var runCVM = null;
+    var isRunning = false;
 
     Module.onRuntimeInitialized = function() {
-      runCVM = Module.cwrap("runCVM", "string", ["string"], {async: true});
-      cvmReady = true;
-      document.getElementById("status").textContent = "CVM++ engine ready.";
+        runCVM = Module.cwrap("runCVM", "string", ["string"], {async: true});
+        cvmReady = true;
+        document.getElementById("status").textContent = "CVM++ engine ready.";
     };
 
+    function resetUI() {
+        isRunning = false;
+        document.getElementById("run-btn").disabled = false;
+        document.getElementById("run-btn").textContent = "Run";
+        document.getElementById("input-row").classList.remove("visible");
+        document.getElementById("inline-input").value = "";
+    }
+
     async function runCode() {
-      if (!cvmReady) {
-        document.getElementById("output-display").textContent = "Engine still loading, please wait...";
-        return;
-      }
+        if (!cvmReady) {
+            document.getElementById("output-display").textContent = "Engine still loading...";
+            return;
+        }
 
-      var code = document.getElementById("editor").value;
-      var display = document.getElementById("output-display");
-      display.textContent = "";
-      display.className = "";
+        // prevent double clicking run while already running
+        if (isRunning) return;
+        isRunning = true;
 
-      // disable run button while running
-      document.getElementById("run-btn").disabled = true;
-      document.getElementById("run-btn").textContent = "Running...";
+        var code = document.getElementById("editor").value;
+        var display = document.getElementById("output-display");
+        display.textContent = "";
+        display.className = "";
 
-      var result = await runCVM(code);
+        document.getElementById("run-btn").disabled = true;
+        document.getElementById("run-btn").textContent = "Running...";
 
-      // re-enable run button
-      document.getElementById("run-btn").disabled = false;
-      document.getElementById("run-btn").textContent = "Run";
+        try {
+            var result = await runCVM(code);
 
-      if (result && result.startsWith("[") && result.includes("Error]")) {
-        display.className = "error";
-      }
-      display.textContent += result || "(no output)";
+            if (result && result.startsWith("[") && result.includes("Error]")) {
+                display.className = "error";
+            }
+            display.textContent += result || "(no output)";
+        } catch (e) {
+            display.className = "error";
+            display.textContent = "[Error] Something went wrong: " + e.message;
+        } finally {
+            // always reset UI regardless of success or error
+            resetUI();
+        }
     }
 
     function clearAll() {
-      document.getElementById("editor").value = "";
-      document.getElementById("output-display").textContent = "";
-      document.getElementById("output-display").className = "";
-      document.getElementById("input-row").classList.remove("visible");
+        if (isRunning) {
+            // force reset if stuck
+            resetUI();
+        }
+        document.getElementById("editor").value = "";
+        document.getElementById("output-display").textContent = "";
+        document.getElementById("output-display").className = "";
     }
 
     // tab key inserts 4 spaces
     document.getElementById("editor").addEventListener("keydown", function(e) {
-      if (e.key === "Tab") {
-        e.preventDefault();
-        var start = this.selectionStart;
-        var end = this.selectionEnd;
-        this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
-        this.selectionStart = this.selectionEnd = start + 4;
-      }
+        if (e.key === "Tab") {
+            e.preventDefault();
+            var start = this.selectionStart;
+            var end = this.selectionEnd;
+            this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+            this.selectionStart = this.selectionEnd = start + 4;
+        }
     });
-  </script>
+</script>
 </body>
 </html>

@@ -91,11 +91,19 @@ NodePtr Parser::parseVariableDeclaration(){
 NodePtr Parser::parsePrint(){
     advance();
     NodePtr expression=parseExpression();
+    if(!check(TokenType::NEWLINE) && !check(TokenType::END_OF_FILE)){
+        throw std::runtime_error("Line "+std::to_string(peek().line)+": Unexpected token'"+peek().lexeme+"' after output statement");
+    }
+    match(TokenType::NEWLINE);
     return std::make_unique<PrintStatement>(std::move(expression));
 }
 NodePtr Parser::parseInput(){
     advance();
     Token name=expect(TokenType::IDENTIFIER, "expected variable name after 'input'");
+    if(!check(TokenType::NEWLINE) && !check(TokenType::END_OF_FILE)){
+        throw std::runtime_error("Line "+std::to_string(peek().line)+": Unexpected token '"+peek().lexeme+"' after input statement");
+    }
+    match(TokenType::NEWLINE);
     return std::make_unique<InputStatement>(name.lexeme);
 }
 
@@ -178,6 +186,11 @@ NodePtr Parser::parseMultiplyDivide(){
 }
 
 NodePtr Parser::parsePrimary(){
+    if(check(TokenType::MINUS)){
+        advance();
+        NodePtr operand=parsePrimary();
+        return std::make_unique<BinaryExpression>("-", std::make_unique<LiteralExpression>(0), std::move(operand));
+    }
     if(check(TokenType::NUMBER)){
         int value=std::stoi(advance().lexeme);
         return std::make_unique<LiteralExpression>(value);

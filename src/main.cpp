@@ -187,7 +187,8 @@ extern "C"{
             }
             catch(const exception& e){
                 cout.rdbuf(oldCout);
-                output=string("[Runtime Error] ")+e.what();
+                output=buffer.str();
+                output+=string("\n[Runtime Error] ")+e.what();
                 return output.c_str();
             }
 
@@ -205,34 +206,34 @@ extern "C"{
     }
 }
 
-// int main(){
-//     string source="let x = 0\n"
-//     "while x<6:\n"
-//     "output x\n"
-//     "if x%2==0 :\n"
-//     "let x = x + 1\n"
-//     "else:\n"
-//     "let x=x+2\n"
-//     "end\n"
-//     "end\n";
-//     Lexer lexer(source);
-//     auto tokens=lexer.tokenize();
-//     for(const Token& t:tokens){
-//         cout<<"Line "<<t.line<<" | lexeme: "<<t.lexeme<<" | type: "<<(int)t.type<<"\n";
-//     }
+int main(){
+    // string source="let x = -999999999\n"
+    // "let y = 1\n"
+    // "let z = x + y\n"
+    // "output x\n"
+    // "if x <= -999999:\n"
+    // "output 100\n"
+    // "end\n"
+    // "output y\n"
+    // "output z\n";
+    // Lexer lexer(source);
+    // auto tokens=lexer.tokenize();
+    // for(const Token& t:tokens){
+    //     cout<<"Line "<<t.line<<" | lexeme: "<<t.lexeme<<" | type: "<<(int)t.type<<"\n";
+    // }
 
-//     Parser parser(tokens);
-//     auto ast=parser.parse();
-//     cout<<"AST has "<<ast.size()<<" top-level statements:\n\n";
-//     printAST(ast);
+    // Parser parser(tokens);
+    // auto ast=parser.parse();
+    // cout<<"AST has "<<ast.size()<<" top-level statements:\n\n";
+    // printAST(ast);
 
-//     Compiler compiler;
-//     Chunk chunk=compiler.compile(ast);
-//     printBytecode(chunk);
+    // Compiler compiler;
+    // Chunk chunk=compiler.compile(ast);
+    // printBytecode(chunk);
 
-//     cout<<"\n--- Program Output ---\n";
-//     VM vm;
-//     vm.run(chunk);
+    // cout<<"\n--- Program Output ---\n";
+    // VM vm;
+    // vm.run(chunk);
 
-//     return 0;
-// }
+    return 0;
+}
