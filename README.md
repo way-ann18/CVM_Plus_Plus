@@ -1,10 +1,10 @@
 # CVM++ — Stack-Based Virtual Machine & Custom Compiler
 
-CVM++ is a lightweight scripting language that was built from scratch in C++. Custom `.cvm` scripts are compiled down to bytecode, which is then executed by a custom-built, stack-based Virtual Machine. This project was developed so that how real programming languages work under the hood — from raw source text all the way to execution — could be understood and demystified.
+CVM++ is a lightweight scripting language that was built from scratch in C++. Custom `.cvm` scripts are compiled down to bytecode, which is then executed by a custom-built, stack-based Virtual Machine. This project was developed so that how real programming languages work under the hood - from raw source text all the way to execution — could be understood and demystified.
 
 ## Live Playground
 
-CVM++ can be tried in the browser — no installation needed:
+CVM++ can be tried in the browser - no installation needed:
 
 **[https://way-ann18.github.io/CVM_Plus_Plus](https://way-ann18.github.io/CVM_Plus_Plus)**
 
@@ -18,10 +18,10 @@ CVM++ can be tried in the browser — no installation needed:
 Source Code  →  Lexer  →  Parser  →  Compiler  →  Virtual Machine  →  Output
 ```
 
-- **Lexer** — raw source text is read and broken into tokens
-- **Parser** — tokens are arranged into an Abstract Syntax Tree (AST)
-- **Compiler** — the AST is traversed and bytecode instructions are generated
-- **Virtual Machine** — the bytecode is executed on a stack-based architecture
+- **Lexer** - raw source text is read and broken into tokens
+- **Parser** - tokens are arranged into an Abstract Syntax Tree (AST)
+- **Compiler** - the AST is traversed and bytecode instructions are generated
+- **Virtual Machine** - the bytecode is executed on a stack-based architecture
 
 ---
 
@@ -247,13 +247,3 @@ Errors are attributed to the correct stage of the pipeline:
 - Concepts: Lexical analysis, recursive descent parsing, bytecode generation, stack-based execution
 
 ---
-
-## References
-
-- [Crafting Interpreters](https://craftinginterpreters.com) by Robert Nystrom — the definitive guide for building lexers, parsers, and virtual machines from scratch
-
----
-
-## License
-
-MIT License — free to use, modify, and distribute.
