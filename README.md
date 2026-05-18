@@ -198,13 +198,3 @@ Flags can be passed when the program is run to see internal details:
 - Concepts: Lexical analysis, recursive descent parsing, bytecode generation, stack-based execution
 
 ---
-
-## References
-
-- [Crafting Interpreters](https://craftinginterpreters.com) by Robert Nystrom — the definitive guide for building lexers, parsers, and virtual machines from scratch
-
----
-
-## License
-
-MIT License — free to use, modify, and distribute.
