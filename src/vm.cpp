@@ -8,7 +8,7 @@ void VM::push(int value){
 
 int VM::pop(){
     if(stack.empty()){
-        throw std::runtime_error("VM: Stack underflow- tried to pop from empty stack");
+        throw std::runtime_error("VM: Stack underflow- too many operations on empty stack");
     }
     int value=stack.back();
     stack.pop_back();

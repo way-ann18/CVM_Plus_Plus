@@ -50,8 +50,9 @@ struct InputStatement:ASTnode{
 struct IfStatement:ASTnode{
     NodePtr condition;
     std::vector<NodePtr> thenBlock;
+    std::vector<std::pair<NodePtr, std::vector<NodePtr>>> elseIfBlocks;
     std::vector<NodePtr> elseBlock;
-    IfStatement(NodePtr cond, std::vector<NodePtr> tb, std::vector<NodePtr> eb):condition(std::move(cond)), thenBlock(std::move(tb)), elseBlock(std::move(eb)){}
+    IfStatement(NodePtr cond, std::vector<NodePtr> tb, std::vector<std::pair<NodePtr, std::vector<NodePtr>>> eib,  std::vector<NodePtr> eb):condition(std::move(cond)), thenBlock(std::move(tb)), elseIfBlocks(std::move(eib)), elseBlock(std::move(eb)){}
 };
 
 struct WhileStatement:ASTnode{

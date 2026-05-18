@@ -102,14 +102,23 @@ end</textarea>
     };
 
     function runCode() {
-      if (!cvmReady) {
+    if (!cvmReady) {
         document.getElementById('output').value = 'Engine still loading, please wait...';
         return;
-      }
-      var code = document.getElementById('editor').value;
-      var result = runCVM(code);
-      document.getElementById('output').value = result || '(no output)';
     }
+    var code = document.getElementById('editor').value;
+    var result = runCVM(code);
+    var outputEl = document.getElementById('output');
+
+    // check if result is an error
+    if (result.startsWith('[') && result.includes('Error]')) {
+        outputEl.classList.add('error');
+    } else {
+        outputEl.classList.remove('error');
+    }
+
+    outputEl.value = result;
+}
 
     function clearAll() {
       document.getElementById('editor').value = '';

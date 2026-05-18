@@ -107,19 +107,43 @@ void Compiler::compileInput(InputStatement* node){
 }
 
 void Compiler::compileIf(IfStatement* node){
+    std::vector<int> endJumps;
+
     compileExpression(node->condition.get());
     chunk.emit(OpCode::OP_JUMP_IF_FALSE, 0);
-    int jumpIfFalsePosition=(int)chunk.code.size()-1;
+    int firstJumpPosition=(int)chunk.code.size()-1;
+
     for(const auto& statement:node->thenBlock){
         compileStatement(statement.get());
     }
+
     chunk.emit(OpCode::OP_JUMP, 0);
-    int jumpPosition=(int)chunk.code.size()-1;
-    chunk.code[jumpIfFalsePosition]=(uint8_t)chunk.code.size();
+    endJumps.push_back((int)chunk.code.size()-1);
+
+    chunk.code[firstJumpPosition]=(uint8_t)chunk.code.size();
+
+    for(auto& [elseIfCondition, elseIfBlock]:node->elseIfBlocks){
+        compileExpression(elseIfCondition.get());
+        chunk.emit(OpCode::OP_JUMP_IF_FALSE, 0);
+        int jumpPosition=(int)chunk.code.size()-1;
+
+        for(const auto& statement:elseIfBlock){
+            compileStatement(statement.get());
+        }
+
+        chunk.emit(OpCode::OP_JUMP, 0);
+        endJumps.push_back((int)chunk.code.size()-1);
+
+        chunk.code[jumpPosition]=(uint8_t)chunk.code.size();
+    }
+    
     for(const auto& statement:node->elseBlock){
         compileStatement(statement.get());
     }
-    chunk.code[jumpPosition]=(uint8_t)chunk.code.size();
+
+    for(int position:endJumps){
+        chunk.code[position]=(uint8_t)chunk.code.size();
+    }
 }
 
 void Compiler::compileWhile(WhileStatement* node){

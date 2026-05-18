@@ -21,6 +21,7 @@ using namespace std;
 //         else if(auto* n=dynamic_cast<IfStatement*>(node.get())){
 //             cout<<pad<<"IfStatement\n";
 //             cout<<pad<<" then: "<<n->thenBlock.size()<<" statements\n";
+//             cout<<pad<<" else if blocks: "<<n->elseIfBlocks.size()<<"\n";
 //             cout<<pad<<" else: "<<n->elseBlock.size()<<" statements\n";
 //         }
 //         else if(auto* n=dynamic_cast<WhileStatement*>(node.get())){
@@ -140,19 +141,58 @@ extern "C"{
             streambuf* oldCout=cout.rdbuf(buffer.rdbuf());
             string source(sourceCode);
             Lexer lexer(source);
-            auto tokens=lexer.tokenize();
+            vector<Token> tokens;
+            try{
+                tokens=lexer.tokenize();
+            }
+            catch(const exception& e){
+                cout.rdbuf(oldCout);
+                output=string("[Lexer Error] ")+e.what();
+                return output.c_str();
+            }
+            
             Parser parser(tokens);
-            auto ast=parser.parse();
+            vector<NodePtr> ast;
+            try{
+                ast=parser.parse();
+            }
+            catch(const exception& e){
+                cout.rdbuf(oldCout);
+                output=string("[Parser Error] ")+e.what();
+                return output.c_str();
+            }
+
             Compiler compiler;
-            Chunk chunk=compiler.compile(ast);
+            Chunk chunk;
+            try{
+                chunk=compiler.compile(ast);
+            }
+            catch(const exception& e){
+                cout.rdbuf(oldCout);
+                output=string("[Compiler Error] ")+e.what();
+                return output.c_str();
+            }
+
             VM vm;
-            vm.run(chunk);
+            try{
+                vm.run(chunk);
+            }
+            catch(const exception& e){
+                cout.rdbuf(oldCout);
+                output=string("[Runtime Error] ")+e.what();
+                return output.c_str();
+            }
+
             cout.rdbuf(oldCout);
             output=buffer.str();
+            if(output.empty()){
+                output="(no output)";
+            }
         }
         catch(const exception& e){
-            output=string("Error: ")+e.what();
+            output=string("[Error] ")+e.what();
         }
+        
         return output.c_str();
     }
 }
