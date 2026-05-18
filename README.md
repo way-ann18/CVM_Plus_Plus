@@ -9,7 +9,7 @@ CVM++ is a lightweight scripting language that was built from scratch in C++. Cu
 `.cvm` source code is passed through four stages:
 
 ```
-Source Code  →  Lexer  →  Parser  →  Compiler  →  Virtual Machine  →  Output
+Source Code  -  Lexer  -  Parser  -  Compiler  -  Virtual Machine  -  Output
 ```
 
 - **Lexer** — raw source text is read and broken into tokens
