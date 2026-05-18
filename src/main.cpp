@@ -207,13 +207,10 @@ extern "C"{
 }
 
 int main(){
-    // string source="let x = -999999999\n"
-    // "let y = 1\n"
+    // string source="let x = 5*(6+10)\n"
+    // "let y = (1+2)*(9+5)\n"
     // "let z = x + y\n"
     // "output x\n"
-    // "if x <= -999999:\n"
-    // "output 100\n"
-    // "end\n"
     // "output y\n"
     // "output z\n";
     // Lexer lexer(source);

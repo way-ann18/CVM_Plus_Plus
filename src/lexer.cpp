@@ -118,6 +118,14 @@ std::vector<Token> Lexer::tokenize(){
                 tokens.push_back({TokenType::EQUALS, "=", line});
             }
         }
+        else if(c=='('){
+            advance();
+            tokens.push_back({TokenType::LEFT_PARENTHESIS, "(", line});
+        }
+        else if(c==')'){
+            advance();
+            tokens.push_back({TokenType::RIGHT_PARENTHESIS, ")", line});
+        }
         else if(c==':'){
             advance();
             tokens.push_back({TokenType::COLON, ":", line});

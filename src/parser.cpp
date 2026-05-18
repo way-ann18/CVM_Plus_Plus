@@ -186,6 +186,12 @@ NodePtr Parser::parseMultiplyDivide(){
 }
 
 NodePtr Parser::parsePrimary(){
+    if(check(TokenType::LEFT_PARENTHESIS)){
+        advance();
+        NodePtr expression=parseExpression();
+        expect(TokenType::RIGHT_PARENTHESIS, "expected ')' to close bracket");
+        return expression;
+    }
     if(check(TokenType::MINUS)){
         advance();
         NodePtr operand=parsePrimary();

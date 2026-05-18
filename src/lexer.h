@@ -30,6 +30,9 @@ enum class TokenType{
     ELSE,
     WHILE,
 
+    LEFT_PARENTHESIS,
+    RIGHT_PARENTHESIS,
+
     NEWLINE,
     END,
     END_OF_FILE
