@@ -1,6 +1,6 @@
-# CVM++ — Stack-Based Virtual Machine & Custom Compiler
+# CVM++ - Stack-Based Virtual Machine & Custom Compiler
 
-CVM++ is a lightweight scripting language that was built from scratch in C++. Custom `.cvm` scripts are compiled down to bytecode, which is then executed by a custom-built, stack-based Virtual Machine. This project was developed so that how real programming languages work under the hood - from raw source text all the way to execution — could be understood and demystified.
+CVM++ is a lightweight scripting language that was built from scratch in C++. Custom `.cvm` scripts are compiled down to bytecode, which is then executed by a custom-built, stack-based Virtual Machine. This project was developed so that how real programming languages work under the hood - from raw source text all the way to execution - could be understood and demystified.
 
 ## Live Playground
 
