@@ -1,6 +1,12 @@
-# CVM++ - Stack-Based Virtual Machine & Custom Compiler
+# CVM++ — Stack-Based Virtual Machine & Custom Compiler
 
-CVM++ is a lightweight scripting language that was built from scratch in C++. Custom `.cvm` scripts are compiled down to bytecode, which is then executed by a custom-built, stack-based Virtual Machine. This project was developed so that how real programming languages work under the hood - from raw source text all the way to execution.
+CVM++ is a lightweight scripting language that was built from scratch in C++. Custom `.cvm` scripts are compiled down to bytecode, which is then executed by a custom-built, stack-based Virtual Machine. This project was developed so that how real programming languages work under the hood — from raw source text all the way to execution — could be understood and demystified.
+
+## Live Playground
+
+CVM++ can be tried in the browser — no installation needed:
+
+**[https://way-ann18.github.io/CVM_Plus_Plus](https://way-ann18.github.io/CVM_Plus_Plus)**
 
 ---
 
@@ -9,7 +15,7 @@ CVM++ is a lightweight scripting language that was built from scratch in C++. Cu
 `.cvm` source code is passed through four stages:
 
 ```
-Source Code  -  Lexer  -  Parser  -  Compiler  -  Virtual Machine  -  Output
+Source Code  →  Lexer  →  Parser  →  Compiler  →  Virtual Machine  →  Output
 ```
 
 - **Lexer** — raw source text is read and broken into tokens
@@ -21,16 +27,22 @@ Source Code  -  Lexer  -  Parser  -  Compiler  -  Virtual Machine  -  Output
 
 ## Language features
 
-| Feature | Syntax |
-|---|---|
-| Variable declaration | `let x = 10` |
-| Arithmetic | `x + y`, `x - y`, `x * y`, `x / y` |
-| Comparison | `x == y`, `x < y`, `x > y` |
-| Boolean literals | `true`, `false` |
-| Print output | `output x` |
-| Read input | `input x` |
-| If / else | `if condition:` ... `end` |
-| While loop | `while condition:` ... `end` |
+| Feature | Syntax | Description |
+|---|---|---|
+| Variable declaration | `let x = 10` | Integer or boolean assignment |
+| Arithmetic | `x + y`, `x - y`, `x * y`, `x / y` | Basic arithmetic |
+| Modulo | `x % y` | Remainder operator |
+| Comparison | `x == y`, `x < y`, `x > y` | Relational operators |
+| Greater/less equal | `x >= y`, `x <= y` | Extended relational operators |
+| Negative numbers | `let x = -10` | Negative integer support |
+| Brackets | `(x + y) * z` | Grouping to override precedence |
+| Boolean literals | `true`, `false` | Stored as 1 and 0 internally |
+| Print output | `output x` | Print value to console |
+| Read input | `input x` | Read integer from user |
+| If / else if / else | `if condition:` ... `else if:` ... `else:` ... `end` | Multi-branch conditional |
+| While loop | `while condition:` ... `end` | Condition-based loop |
+| Nested blocks | `while` inside `if`, `if` inside `while` | Fully supported |
+| Comments | `# this is a comment` | Line comments |
 
 ---
 
@@ -42,52 +54,85 @@ let x = 42
 output x
 ```
 
-### Arithmetic
+### Arithmetic and modulo
 ```
 let a = 10
-let b = 20
-let c = a + b
-output c
+let b = 3
+let sum = a + b
+let remainder = a % b
+output sum
+output remainder
 ```
 
-### If / Else
+### Brackets and precedence
 ```
-let x = 15
+let x = 2 + 3 * 4
+let y = (2 + 3) * 4
+output x
+output y
+```
 
-if x < 20:
-    output x
-    let x = x + 5
-    output x
+### Negative numbers
+```
+let x = -10
+let y = -x
+output x
+output y
+```
+
+### If / else if / else
+```
+let marks = 75
+if marks >= 90:
+    output 1
+else if marks >= 75:
+    output 2
+else if marks >= 60:
+    output 3
+else:
+    output 4
 end
 ```
 
-### While Loop
+### While loop
 ```
-let x = 1
-
-while x < 6:
-    output x
-    let x = x + 1
+let i = 1
+while i <= 5:
+    output i
+    let i = i + 1
 end
 ```
 
-### User Input
+### Nested blocks
+```
+let i = 1
+while i <= 6:
+    if i % 2 == 0:
+        output 0
+    else:
+        output 1
+    end
+    let i = i + 1
+end
+```
+
+### User input
 ```
 input x
 let y = x + 10
 output y
 ```
 
-### Nested blocks
+### Factorial
 ```
-let x = 0
-
-while x < 10:
-    let x = x + 1
-    if x == 5:
-        output x
-    end
+input n
+let result = 1
+let i = 1
+while i <= n:
+    let result = result * i
+    let i = i + 1
 end
+output result
 ```
 
 ---
@@ -116,8 +161,8 @@ C:\msys64\ucrt64\bin
 ### Build from source
 
 ```powershell
-git clone https://github.com/YourUsername/cvm-plus-plus.git
-cd cvm-plus-plus
+git clone https://github.com/way-ann18/CVM_Plus_Plus.git
+cd CVM_Plus_Plus
 cd build
 cmake .. -G "MinGW Makefiles"
 cmake --build .
@@ -129,20 +174,14 @@ cmake --build .
 .\cvm.exe ..\scripts\hello.cvm
 ```
 
-### Run the REPL (interactive mode)
-
-```powershell
-.\cvm.exe
-```
-
 ---
 
 ## Project structure
 
 ```
-cvm-plus-plus/
+CVM_Plus_Plus/
 ├── src/
-│   ├── main.cpp        # Entry point — REPL and file runner
+│   ├── main.cpp        # Entry point and WebAssembly export
 │   ├── lexer.h         # Token types and Lexer declaration
 │   ├── lexer.cpp       # Lexer implementation
 │   ├── parser.h        # AST node types and Parser declaration
@@ -153,6 +192,11 @@ cvm-plus-plus/
 │   └── vm.cpp          # VM implementation
 ├── scripts/
 │   └── hello.cvm       # Example scripts
+├── web/
+│   ├── index.html      # Browser playground UI
+│   ├── cvm.js          # Emscripten JS glue
+│   └── cvm.wasm        # Compiled WebAssembly binary
+├── docs/               # GitHub Pages deployment
 ├── build/              # CMake build output
 └── CMakeLists.txt      # Build configuration
 ```
@@ -168,7 +212,9 @@ The following bytecode opcodes are supported by CVM++:
 | `OP_CONSTANT` | A constant value is pushed onto the stack |
 | `OP_TRUE` / `OP_FALSE` | A boolean value is pushed onto the stack |
 | `OP_ADD` / `OP_SUBTRACT` / `OP_MULTIPLY` / `OP_DIVIDE` | Arithmetic operations are performed |
+| `OP_MODULO` | Remainder operation is performed |
 | `OP_EQUAL` / `OP_LESS` / `OP_GREATER` | Comparison operations are performed |
+| `OP_LESS_EQUAL` / `OP_GREATER_EQUAL` | Extended comparison operations are performed |
 | `OP_STORE` | The top of the stack is popped and stored into a variable |
 | `OP_LOAD` | A variable's value is pushed onto the stack |
 | `OP_JUMP` | An unconditional jump is made to an address |
@@ -179,15 +225,16 @@ The following bytecode opcodes are supported by CVM++:
 
 ---
 
-## Debug modes
+## Error handling
 
-Flags can be passed when the program is run to see internal details:
+Errors are attributed to the correct stage of the pipeline:
 
-```powershell
-.\cvm.exe --debug-tokens script.cvm     # all tokens from the lexer are printed
-.\cvm.exe --debug-ast script.cvm        # the Abstract Syntax Tree is printed
-.\cvm.exe --debug-bytecode script.cvm   # the compiled bytecode is printed
-```
+| Prefix | Stage | Example |
+|---|---|---|
+| `[Lexer Error]` | Tokenization | Unrecognized character |
+| `[Parser Error]` | Parsing | Unexpected token, missing `:` or `end` |
+| `[Compiler Error]` | Bytecode generation | Unknown operator |
+| `[Runtime Error]` | Execution | Division by zero, undefined variable |
 
 ---
 
@@ -195,6 +242,18 @@ Flags can be passed when the program is run to see internal details:
 
 - Language: C++17
 - Build tool: CMake
+- Browser deployment: Emscripten (WebAssembly) + Asyncify
+- Hosting: GitHub Pages
 - Concepts: Lexical analysis, recursive descent parsing, bytecode generation, stack-based execution
 
 ---
+
+## References
+
+- [Crafting Interpreters](https://craftinginterpreters.com) by Robert Nystrom — the definitive guide for building lexers, parsers, and virtual machines from scratch
+
+---
+
+## License
+
+MIT License — free to use, modify, and distribute.
