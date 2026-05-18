@@ -1,6 +1,58 @@
 #include "vm.h"
 #include <iostream>
 #include<stdexcept>
+#ifdef __EMSCRIPTEN__
+#include<emscripten.h>
+
+EM_ASYNC_JS(int, inputFromUser, (), {
+        return new Promise(function(resolve){
+            var inputRow=document.getElementById("input-row");
+            var inlineInput=document.getElementById("inline-input");
+            var display=document.getElementById("output-display");
+
+            display.textContent+="input > ";
+            inputRow.classList.add("visible");
+            inlineInput.value="";
+            inlineInput.focus();
+
+            function onSubmit(){
+                var val=parseInt(inlineInput.value.trim()) || 0;
+                display.textContent+=val+"\n";
+                inputRow.classList.remove("visible");
+                inlineInput.removeEventListener("keydown", onKey);
+                document.getElementById("submit-input").removeEventListener("click", onSubmit);
+                resolve(val);
+            }
+
+            function onKey(e){
+                if(e.key=="Enter"){
+                    onSubmit();
+                }
+            }
+
+            inlineInput.addEventListener("keydown", onKey);
+            document.getElementById("submit-input").addEventListener("click", onSubmit);
+            
+        });
+    });
+
+#endif
+
+void VM::runInput(const Chunk& chunk){
+#ifdef __EMSCRIPTEN__
+    
+
+    int value=inputFromUser();
+    push(value);
+
+#else
+    int value;
+    std::cout<<"Input: ";
+    std::cin>>value;
+    push(value);
+#endif
+}
+
 
 void VM::push(int value){
     stack.push_back(value);
@@ -62,6 +114,12 @@ void VM::run(const Chunk& chunk){
                 break;
             case OpCode::OP_GREATER:
                 runGreater();
+                break;
+            case OpCode::OP_LESS_EQUAL:
+                runLessEqual();
+                break;
+            case OpCode::OP_GREATER_EQUAL:
+                runGreaterEqual();
                 break;
             case OpCode::OP_STORE:
                 runStore(chunk);
@@ -163,16 +221,21 @@ void VM::runGreater(){
     push(a>b? 1:0);
 }
 
+void VM::runLessEqual(){
+    int b=pop();
+    int a=pop();
+    push(a<=b? 1:0);
+}
+
+void VM::runGreaterEqual(){
+    int b=pop();
+    int a=pop();
+    push(a>=b? 1:0);
+}
+
 void VM::runOutput(){
     int value=pop();
     std::cout<<value<<"\n";
-}
-
-void VM::runInput(const Chunk& chunk){
-    int value;
-    std::cout<<"Input: ";
-    std::cin>>value;
-    push(value);
 }
 
 void VM::runJump(const Chunk& chunk){

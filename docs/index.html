@@ -19,14 +19,14 @@
     h1 { font-size: 28px; margin-bottom: 6px; color: #cba6f7; }
     p  { font-size: 14px; color: #a6adc8; margin-bottom: 24px; }
     .container {
-      width: 100%; max-width: 860px;
+      width: 100%; max-width: 960px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
     label { font-size: 12px; color: #a6adc8; margin-bottom: 6px; display: block; }
-    textarea {
-      width: 100%; height: 320px;
+    #editor {
+      width: 100%; height: 340px;
       background: #313244;
       color: #cdd6f4;
       border: 1px solid #45475a;
@@ -36,19 +36,70 @@
       font-size: 14px;
       resize: vertical;
       outline: none;
+      line-height: 1.6;
     }
-    textarea:focus { border-color: #cba6f7; }
-    #output {
+    #editor:focus { border-color: #cba6f7; }
+    .output-panel {
+      display: flex;
+      flex-direction: column;
+      height: 340px;
       background: #181825;
-      color: #a6e3a1;
-      white-space: pre;
-      overflow-y: auto;
+      border: 1px solid #45475a;
+      border-radius: 8px;
+      overflow: hidden;
     }
-    button {
-      margin-top: 16px;
-      padding: 10px 32px;
+    #output-display {
+      flex: 1;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 14px;
+      color: #a6e3a1;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+    #output-display.error { color: #f38ba8; }
+    .input-row {
+      display: none;
+      align-items: center;
+      border-top: 1px solid #313244;
+      padding: 8px 14px;
+      gap: 8px;
+    }
+    .input-row.visible { display: flex; }
+    .input-prompt {
+      color: #cba6f7;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    #inline-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #cdd6f4;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    #submit-input {
+      padding: 4px 12px;
       background: #cba6f7;
       color: #1e1e2e;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    #submit-input:hover { background: #b4befe; }
+    .btn-row {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .btn-row button {
+      padding: 10px 32px;
       border: none;
       border-radius: 8px;
       font-size: 14px;
@@ -56,13 +107,21 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-    button:hover { background: #b4befe; }
-    .btn-row {
-      grid-column: 1 / -1;
-      display: flex;
-      gap: 10px;
+    #run-btn {
+      background: #cba6f7;
+      color: #1e1e2e;
     }
-    #status { font-size: 12px; color: #a6adc8; margin-top: 10px; }
+    #run-btn:hover { background: #b4befe; }
+    #clear-btn {
+      background: #45475a;
+      color: #cdd6f4;
+    }
+    #clear-btn:hover { background: #585b70; }
+    #status {
+      font-size: 12px;
+      color: #a6adc8;
+      margin-top: 12px;
+    }
   </style>
 </head>
 <body>
@@ -72,7 +131,7 @@
   <div class="container">
     <div>
       <label>Code editor</label>
-      <textarea id="editor" spellcheck="false">let x = 1
+      <textarea id="editor" spellcheck="false">input x
 while x < 6:
     output x
     let x = x + 1
@@ -80,11 +139,18 @@ end</textarea>
     </div>
     <div>
       <label>Output</label>
-      <textarea id="output" readonly></textarea>
+      <div class="output-panel">
+        <div id="output-display">(output will appear here)</div>
+        <div class="input-row" id="input-row">
+          <span class="input-prompt">input &gt;</span>
+          <input type="number" id="inline-input" placeholder="enter a number...">
+          <button id="submit-input">Enter</button>
+        </div>
+      </div>
     </div>
     <div class="btn-row">
-      <button onclick="runCode()">Run</button>
-      <button onclick="clearAll()" style="background:#45475a;color:#cdd6f4">Clear</button>
+      <button id="run-btn" onclick="runCode()">Run</button>
+      <button id="clear-btn" onclick="clearAll()">Clear</button>
     </div>
   </div>
 
@@ -96,34 +162,55 @@ end</textarea>
     var runCVM = null;
 
     Module.onRuntimeInitialized = function() {
-      runCVM = Module.cwrap('runCVM', 'string', ['string']);
+      runCVM = Module.cwrap("runCVM", "string", ["string"], {async: true});
       cvmReady = true;
-      document.getElementById('status').textContent = 'CVM++ engine ready.';
+      document.getElementById("status").textContent = "CVM++ engine ready.";
     };
 
-    function runCode() {
-    if (!cvmReady) {
-        document.getElementById('output').value = 'Engine still loading, please wait...';
+    async function runCode() {
+      if (!cvmReady) {
+        document.getElementById("output-display").textContent = "Engine still loading, please wait...";
         return;
-    }
-    var code = document.getElementById('editor').value;
-    var result = runCVM(code);
-    var outputEl = document.getElementById('output');
+      }
 
-    // check if result is an error
-    if (result.startsWith('[') && result.includes('Error]')) {
-        outputEl.classList.add('error');
-    } else {
-        outputEl.classList.remove('error');
-    }
+      var code = document.getElementById("editor").value;
+      var display = document.getElementById("output-display");
+      display.textContent = "";
+      display.className = "";
 
-    outputEl.value = result;
-}
+      // disable run button while running
+      document.getElementById("run-btn").disabled = true;
+      document.getElementById("run-btn").textContent = "Running...";
+
+      var result = await runCVM(code);
+
+      // re-enable run button
+      document.getElementById("run-btn").disabled = false;
+      document.getElementById("run-btn").textContent = "Run";
+
+      if (result && result.startsWith("[") && result.includes("Error]")) {
+        display.className = "error";
+      }
+      display.textContent += result || "(no output)";
+    }
 
     function clearAll() {
-      document.getElementById('editor').value = '';
-      document.getElementById('output').value = '';
+      document.getElementById("editor").value = "";
+      document.getElementById("output-display").textContent = "";
+      document.getElementById("output-display").className = "";
+      document.getElementById("input-row").classList.remove("visible");
     }
+
+    // tab key inserts 4 spaces
+    document.getElementById("editor").addEventListener("keydown", function(e) {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        var start = this.selectionStart;
+        var end = this.selectionEnd;
+        this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 4;
+      }
+    });
   </script>
 </body>
 </html>

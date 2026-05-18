@@ -19,6 +19,8 @@ enum class OpCode:uint8_t{
     OP_EQUAL,
     OP_LESS,
     OP_GREATER,
+    OP_LESS_EQUAL,
+    OP_GREATER_EQUAL,
 
     OP_STORE,
     OP_LOAD,

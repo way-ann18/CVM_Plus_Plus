@@ -84,6 +84,12 @@ void Compiler::compileBinary(BinaryExpression* node){
     else if(node->op==">"){
         chunk.emit(OpCode::OP_GREATER);
     }
+    else if(node->op=="<="){
+        chunk.emit(OpCode::OP_LESS_EQUAL);
+    }
+    else if(node->op==">="){
+        chunk.emit(OpCode::OP_GREATER_EQUAL);
+    }
     else{
         throw std::runtime_error("Compiler: Unknown operator "+node->op);
     }
@@ -122,12 +128,12 @@ void Compiler::compileIf(IfStatement* node){
 
     chunk.code[firstJumpPosition]=(uint8_t)chunk.code.size();
 
-    for(auto& [elseIfCondition, elseIfBlock]:node->elseIfBlocks){
-        compileExpression(elseIfCondition.get());
+    for(auto& elseIfPair:node->elseIfBlocks){
+        compileExpression(elseIfPair.first.get());
         chunk.emit(OpCode::OP_JUMP_IF_FALSE, 0);
         int jumpPosition=(int)chunk.code.size()-1;
 
-        for(const auto& statement:elseIfBlock){
+        for(const auto& statement:elseIfPair.second){
             compileStatement(statement.get());
         }
 

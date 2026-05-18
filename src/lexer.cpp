@@ -90,11 +90,23 @@ std::vector<Token> Lexer::tokenize(){
         }
         else if(c=='<'){
             advance();
-            tokens.push_back({TokenType::LESS, "<", line});
+            if(peek()=='='){
+                advance();
+                tokens.push_back({TokenType::LESS_EQUAL, "<=", line});
+            }
+            else{
+                tokens.push_back({TokenType::LESS, "<", line});
+            }
         }
         else if(c=='>'){
             advance();
-            tokens.push_back({TokenType::GREATER, ">", line});
+            if(peek()=='='){
+                advance();
+                tokens.push_back({TokenType::GREATER_EQUAL, ">=", line});
+            }
+            else{
+                tokens.push_back({TokenType::GREATER, ">", line});
+            }
         }
         else if(c=='='){
             advance();

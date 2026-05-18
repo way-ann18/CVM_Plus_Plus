@@ -18,6 +18,8 @@ enum class TokenType{
     EQUAL_EQUAL,
     LESS,
     GREATER,
+    LESS_EQUAL,
+    GREATER_EQUAL,
     EQUALS,
     COLON,
 

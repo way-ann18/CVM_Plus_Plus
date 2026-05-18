@@ -55,9 +55,6 @@ std::vector<NodePtr> Parser::parseBlock(){
         statements.push_back(parseStatement());
         skipNewLines();
     }
-    if(check(TokenType::END)){
-        advance();
-    }
     return statements;
 }
 
@@ -124,6 +121,7 @@ NodePtr Parser::parseIf(){
             skipNewLines();
         }
         else{
+            match(TokenType::COLON);
             match(TokenType::NEWLINE);
             elseBlock=parseBlock();
             break;
@@ -151,7 +149,7 @@ NodePtr Parser::parseExpression(){
 
 NodePtr Parser::parseComparison(){
     NodePtr left=parseAddSubtract();
-    while(check(TokenType::EQUAL_EQUAL) || check(TokenType::LESS) || check(TokenType::GREATER)){
+    while(check(TokenType::EQUAL_EQUAL) || check(TokenType::LESS) || check(TokenType::GREATER) || check(TokenType::LESS_EQUAL) || check(TokenType::GREATER_EQUAL)){
         std::string op=advance().lexeme;
         NodePtr right=parseAddSubtract();
         left=std::make_unique<BinaryExpression>(op, std::move(left), std::move(right));

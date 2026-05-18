@@ -27,6 +27,8 @@ class VM{
         void runEqual();
         void runLess();
         void runGreater();
+        void runLessEqual();
+        void runGreaterEqual();
         void runOutput();
         void runInput(const Chunk& chunk);
         void runJump(const Chunk& chunk);

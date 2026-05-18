@@ -286,6 +286,7 @@ CMakeFiles/cvm.dir/src/main.cpp.obj: D:/CVM++/src/main.cpp \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/shared_ptr.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/shared_ptr_atomic.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/shared_ptr_base.h \
+  c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/sstream.tcc \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_algobase.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_bvector.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_construct.h \
@@ -345,6 +346,7 @@ CMakeFiles/cvm.dir/src/main.cpp.obj: D:/CVM++/src/main.cpp \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/mingw32/bits/os_defines.h \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/new \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/ostream \
+  c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/sstream \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/stdexcept \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/streambuf \
   c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/string \
@@ -877,6 +879,8 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/locale_facets.h:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/ostream.tcc:
 
+c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/sstream.tcc:
+
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/streambuf.tcc:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/bits/streambuf_iterator.h:
@@ -890,5 +894,7 @@ c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/iostream:
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/istream:
 
 c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/ostream:
+
+c:/mingw/lib/gcc/mingw32/6.3.0/include/c++/sstream:
 
 D:/CVM++/src/parser.cpp:

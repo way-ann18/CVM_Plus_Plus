@@ -85,6 +85,14 @@ using namespace std;
 //                 cout<<"OP_GREATER";
 //                 i++;
 //                 break;
+//             case OpCode::OP_LESS_EQUAL:
+//                 cout<<"OP_LESS_EQUAL";
+//                 i++;
+//                 break;
+//             case OpCode::OP_GREATER_EQUAL:
+//                 cout<<"OP_GREATER_EQUAL";
+//                 i++;
+//                 break;
 //             case OpCode::OP_STORE:
 //                 cout<<"OP_STORE "<<(int)chunk.code[i+1]<<" (name="<<chunk.variableNames[chunk.code[i+1]]<<")";
 //                 i+=2;
@@ -197,37 +205,34 @@ extern "C"{
     }
 }
 
-int main(){
-    // string source="let x = 10\n"
-    // "let y = x + 5\n"
-    // "output y\n"
-    // "if x < 20 :\n"
-    // "output x\n"
-    // "let y = x + 1\n"
-    // "output y\n"
-    // "end\n"
-    // "while x < 15 :\n"
-    // "let x = x + 1\n"
-    // "output x\n"
-    // "end\n";
-    // Lexer lexer(source);
-    // auto tokens=lexer.tokenize();
-    // for(const Token& t:tokens){
-    //     cout<<"Line "<<t.line<<" | lexeme: "<<t.lexeme<<" | type: "<<(int)t.type<<"\n";
-    // }
+// int main(){
+//     string source="let x = 0\n"
+//     "while x<6:\n"
+//     "output x\n"
+//     "if x%2==0 :\n"
+//     "let x = x + 1\n"
+//     "else:\n"
+//     "let x=x+2\n"
+//     "end\n"
+//     "end\n";
+//     Lexer lexer(source);
+//     auto tokens=lexer.tokenize();
+//     for(const Token& t:tokens){
+//         cout<<"Line "<<t.line<<" | lexeme: "<<t.lexeme<<" | type: "<<(int)t.type<<"\n";
+//     }
 
-    // Parser parser(tokens);
-    // auto ast=parser.parse();
-    // cout<<"AST has "<<ast.size()<<" top-level statements:\n\n";
-    // printAST(ast);
+//     Parser parser(tokens);
+//     auto ast=parser.parse();
+//     cout<<"AST has "<<ast.size()<<" top-level statements:\n\n";
+//     printAST(ast);
 
-    // Compiler compiler;
-    // Chunk chunk=compiler.compile(ast);
-    // printBytecode(chunk);
+//     Compiler compiler;
+//     Chunk chunk=compiler.compile(ast);
+//     printBytecode(chunk);
 
-    // cout<<"\n--- Program Output ---\n";
-    // VM vm;
-    // vm.run(chunk);
+//     cout<<"\n--- Program Output ---\n";
+//     VM vm;
+//     vm.run(chunk);
 
-    return 0;
-}
+//     return 0;
+// }
