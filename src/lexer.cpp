@@ -141,7 +141,7 @@ std::vector<Token> Lexer::tokenize(){
             }
         }
         else{
-            advance();
+            throw std::runtime_error("Line "+std::to_string(line)+": unrecognized character '"+peek()+"'");
         }
     }
 
