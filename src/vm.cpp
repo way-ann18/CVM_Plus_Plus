@@ -51,6 +51,9 @@ void VM::run(const Chunk& chunk){
             case OpCode::OP_DIVIDE:
                 runDivide();
                 break;
+            case OpCode::OP_MODULO:
+                runModulo();
+                break;
             case OpCode::OP_EQUAL:
                 runEqual();
                 break;
@@ -131,6 +134,15 @@ void VM::runDivide(){
         throw std::runtime_error("VM: Division by 0");
     }
     push(a/b);
+}
+
+void VM::runModulo(){
+    int b=pop();
+    int a=pop();
+    if(b==0){
+        throw std::runtime_error("VM: Modulo by 0");
+    }
+    push(a%b);
 }
 
 void VM::runEqual(){

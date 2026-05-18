@@ -72,6 +72,9 @@ void Compiler::compileBinary(BinaryExpression* node){
     else if(node->op=="/"){
         chunk.emit(OpCode::OP_DIVIDE);
     }
+    else if(node->op=="%"){
+        chunk.emit(OpCode::OP_MODULO);
+    }
     else if(node->op=="=="){
         chunk.emit(OpCode::OP_EQUAL);
     }

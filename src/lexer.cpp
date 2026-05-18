@@ -84,6 +84,10 @@ std::vector<Token> Lexer::tokenize(){
             advance();
             tokens.push_back({TokenType::SLASH, "/", line});
         }
+        else if(c=='%'){
+            advance();
+            tokens.push_back({TokenType::PERCENT, "%", line});
+        }
         else if(c=='<'){
             advance();
             tokens.push_back({TokenType::LESS, "<", line});

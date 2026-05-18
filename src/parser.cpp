@@ -135,7 +135,7 @@ NodePtr Parser::parseComparison(){
     while(check(TokenType::EQUAL_EQUAL) || check(TokenType::LESS) || check(TokenType::GREATER)){
         std::string op=advance().lexeme;
         NodePtr right=parseAddSubtract();
-        left=std::make_unique<BinaryExpression>(op, move(left), move(right));
+        left=std::make_unique<BinaryExpression>(op, std::move(left), std::move(right));
     }
     return left;
 }
@@ -152,7 +152,7 @@ NodePtr Parser::parseAddSubtract(){
 
 NodePtr Parser::parseMultiplyDivide(){
     NodePtr left=parsePrimary();
-    while(check(TokenType::STAR) || check(TokenType::SLASH)){
+    while(check(TokenType::STAR) || check(TokenType::SLASH) || check(TokenType::PERCENT)){
         std::string op=advance().lexeme;
         NodePtr right=parsePrimary();
         left=std::make_unique<BinaryExpression>(op, std::move(left), std::move(right));

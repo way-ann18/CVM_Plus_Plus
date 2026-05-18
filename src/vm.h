@@ -23,6 +23,7 @@ class VM{
         void runSubtract();
         void runMultiply();
         void runDivide();
+        void runModulo();
         void runEqual();
         void runLess();
         void runGreater();
